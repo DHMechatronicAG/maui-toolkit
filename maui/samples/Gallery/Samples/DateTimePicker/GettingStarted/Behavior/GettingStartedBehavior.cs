@@ -112,7 +112,7 @@ namespace Syncfusion.Maui.ControlsGallery.Picker.SfDateTimePicker
 
             _timeFormat = new ObservableCollection<object>()
             {
-                "H mm", "H mm ss", "h mm ss tt", "h mm tt", "HH mm", "HH mm ss", "hh mm ss tt", "hh mm tt", "hh tt", "Default"
+                "H mm", "H mm ss", "h mm ss tt", "h mm tt", "HH mm", "HH mm ss", "hh mm ss tt", "hh mm tt", "hh tt", "Default", "mm ss", "mm", "ss"
             };
 
             _dateFormatComboBox = sampleView.Content.FindByName<Microsoft.Maui.Controls.Picker>("dateFormatComboBox");
@@ -369,7 +369,20 @@ namespace Syncfusion.Maui.ControlsGallery.Picker.SfDateTimePicker
                     case "hh tt":
                         _dateTimePicker.TimeFormat = PickerTimeFormat.hh_tt;
                         break;
-                    case "Default":
+
+					case "mm ss":
+						_dateTimePicker.TimeFormat = PickerTimeFormat.mm_ss;
+						break;
+
+					case "mm":
+						_dateTimePicker.TimeFormat = PickerTimeFormat.mm;
+						break;
+
+					case "ss":
+						_dateTimePicker.TimeFormat = PickerTimeFormat.ss;
+						break;
+
+					case "Default":
                         _dateTimePicker.TimeFormat = PickerTimeFormat.Default;
                         break;
                 }

@@ -1033,7 +1033,9 @@ namespace Syncfusion.Maui.Toolkit.Picker
                     break;
                 case 1:
                     {
-                        int minutes = 0;
+						UpdateMinuteColumn(e, hourFormat, previousSelectedTime, selectedTime, minimumTime, maximumTime);
+
+						int minutes = 0;
                         if (_minuteColumn.ItemsSource != null && _minuteColumn.ItemsSource is ObservableCollection<string> minuteCollection && minuteCollection.Count > e.NewValue)
                         {
                             //// Get the minute value based on the selected index changes value.
@@ -1105,23 +1107,73 @@ namespace Syncfusion.Maui.Toolkit.Picker
                 _minuteColumn.ItemsSource = minutes;
             }
 
-            int minuteIndex = TimePickerHelper.GetMinuteOrSecondIndex(minutes, previousSelectedTime.Value.Minutes);
-            //// Get the minute value based on the selected index changes value.
-            int minute = int.Parse(minutes[minuteIndex]);
+			int minute = 0;
+			if (_minuteColumn.ItemsSource != null && _minuteColumn.ItemsSource is ObservableCollection<string> minuteCollection && minuteCollection.Count > previousSelectedTime.Value.Minutes)
+			{
+				minute = previousSelectedTime.Value.Minutes;
+			}
+
+			ObservableCollection<string> seconds = TimePickerHelper.GetSeconds(SecondInterval, hour, minute,  selectedTime, minimumTime, maximumTime);
+			ObservableCollection<string> previousSeconds = _secondColumn.ItemsSource is ObservableCollection<string> previousSecondCollection ? previousSecondCollection : new ObservableCollection<string>();
+			if (!PickerHelper.IsCollectionEquals(seconds, previousSeconds))
+			{
+				_secondColumn.ItemsSource = seconds;
+			}
 
             SetSelectedTime(new TimeSpan(hour, minute, previousSelectedTime.Value.Seconds));
         }
 
-        /// <summary>
-        /// Method to update the meridiem column based on the selected time value.
-        /// </summary>
-        /// <param name="e">Selection changed event arguments.</param>
-        /// <param name="hourFormat">The hour format.</param>
-        /// <param name="previousSelectedTime">The previous selected time.</param>
-        /// <param name="selectedTime">The selected time.</param>
-        /// <param name="minimumTime">The minimum time.</param>
-        /// <param name="maximumTime">The maximum time.</param>
-        void UpdateMeridiemColumn(PickerSelectionChangedEventArgs e, string hourFormat, TimeSpan? previousSelectedTime, DateTime selectedTime, DateTime minimumTime, DateTime maximumTime)
+		/// <summary>
+		/// Method to update the hour column based on the selected time value.
+		/// </summary>
+		/// <param name="e">Selection changed event arguments.</param>
+		/// <param name="hourFormat">The hour format.</param>
+		/// <param name="previousSelectedTime">The previous selected time.</param>
+		/// <param name="selectedTime">The selected time.</param>
+		/// <param name="minimumTime">The minimum time.</param>
+		/// <param name="maximumTime">The maximum time.</param>
+		void UpdateMinuteColumn(PickerSelectionChangedEventArgs e, string hourFormat, TimeSpan? previousSelectedTime, DateTime selectedTime, DateTime minimumTime, DateTime maximumTime)
+		{
+			if (previousSelectedTime == null)
+			{
+				return;
+			}
+
+			int hour = 0;
+
+			hour = previousSelectedTime.Value.Hours;
+
+			int minute = 0;
+			if (_minuteColumn.ItemsSource != null && _minuteColumn.ItemsSource is ObservableCollection<string> minuteCollection && minuteCollection.Count > e.NewValue)
+			{
+				//// Get the hour value based on the selected index changes value.
+				minute = int.Parse(minuteCollection[e.NewValue]);
+			}
+
+			ObservableCollection<string> seconds = TimePickerHelper.GetSeconds(SecondInterval, hour, minute, selectedTime, minimumTime, maximumTime);
+			ObservableCollection<string> previousSeconds = _secondColumn.ItemsSource is ObservableCollection<string> previousSecondCollection ? previousSecondCollection : new ObservableCollection<string>();
+			if (!PickerHelper.IsCollectionEquals(seconds, previousSeconds))
+			{
+				_secondColumn.ItemsSource = seconds;
+			}
+
+			//int minuteIndex = TimePickerHelper.GetMinuteOrSecondIndex(minutes, previousSelectedTime.Value.Minutes);
+			//         //// Get the minute value based on the selected index changes value.
+			//         int minute = int.Parse(minutes[minuteIndex]);
+
+			SetSelectedTime(new TimeSpan(hour, minute, previousSelectedTime.Value.Seconds));
+		}
+
+		/// <summary>
+		/// Method to update the meridiem column based on the selected time value.
+		/// </summary>
+		/// <param name="e">Selection changed event arguments.</param>
+		/// <param name="hourFormat">The hour format.</param>
+		/// <param name="previousSelectedTime">The previous selected time.</param>
+		/// <param name="selectedTime">The selected time.</param>
+		/// <param name="minimumTime">The minimum time.</param>
+		/// <param name="maximumTime">The maximum time.</param>
+		void UpdateMeridiemColumn(PickerSelectionChangedEventArgs e, string hourFormat, TimeSpan? previousSelectedTime, DateTime selectedTime, DateTime minimumTime, DateTime maximumTime)
         {
             if (previousSelectedTime == null)
             {
@@ -1253,7 +1305,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
                         pickerColumns.Add(_minuteColumn);
                         break;
                     case 2:
-                        _secondColumn = GenerateSecondColumn();
+                        _secondColumn = GenerateSecondColumn(validSelectedTime, currentSelectedTime);
                         _secondColumn.SelectedItem = SelectedTime != null ? PickerHelper.GetSelectedItemDefaultValue(_secondColumn) : null;
                         pickerColumns.Add(_secondColumn);
                         break;
@@ -1320,13 +1372,16 @@ namespace Syncfusion.Maui.Toolkit.Picker
         /// Method to generate the second column with items source and selected index based on format.
         /// </summary>
         /// <returns>Returns second column details.</returns>
-        PickerColumn GenerateSecondColumn()
+        PickerColumn GenerateSecondColumn(TimeSpan? selectedTime, DateTime? selectedDate)
         {
-            int selectedHour = SelectedTime?.Hours ?? _previousSelectedDateTime.Hour;
+			TimeSpan maxTime = TimePickerHelper.GetValidMaxTime(MinimumTime, MaximumTime);
+			DateTime minimumTime = Convert.ToDateTime(MinimumTime.ToString());
+			DateTime maximumTime = Convert.ToDateTime(maxTime.ToString());
+			int selectedHour = SelectedTime?.Hours ?? _previousSelectedDateTime.Hour;
             int selectedMinute = SelectedTime?.Minutes ?? _previousSelectedDateTime.Minute;
             int selectedSecond = SelectedTime?.Seconds ?? _previousSelectedDateTime.Second;
 
-            ObservableCollection<string> seconds = TimePickerHelper.GetSeconds(SecondInterval, selectedHour, selectedMinute, null, null, null);
+            ObservableCollection<string> seconds = TimePickerHelper.GetSeconds(SecondInterval, selectedHour, selectedMinute, selectedDate, minimumTime, maximumTime);
             return new PickerColumn()
             {
                 ItemsSource = seconds,
@@ -1938,7 +1993,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
                 return;
             }
 
-            picker._secondColumn = picker.GenerateSecondColumn();
+            picker._secondColumn = picker.GenerateSecondColumn(null, selectedDate: Convert.ToDateTime(picker.SelectedTime.ToString()));
             //// Replace the second column with second interval.
             picker._columns[secondIndex] = picker._secondColumn;
         }

@@ -56,5 +56,20 @@
         /// Represents default culture based format of the Picker Time format.
         /// </summary>
         Default,
-    }
+
+		/// <summary>
+		/// Represents the minute, and seconds in mm ss format.
+		/// </summary>
+		mm_ss,
+
+		/// <summary>
+		/// Represents the minutes in mm format.
+		/// </summary>
+		mm,
+
+		/// <summary>
+		/// Represents the seconds in ss format.
+		/// </summary>
+		ss
+	}
 }

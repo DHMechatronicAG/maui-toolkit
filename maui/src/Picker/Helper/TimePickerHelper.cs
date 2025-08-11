@@ -440,7 +440,20 @@ namespace Syncfusion.Maui.Toolkit.Picker
                     hourFormat = "hh";
                     formatStringOrder = new List<int>() { 0, 3 };
                     break;
-                default:
+				case "mm_ss":
+					hourFormat = "";
+					formatStringOrder = new List<int>() { 1, 2 };
+					break;
+				case "mm":
+					hourFormat = "";
+					formatStringOrder = new List<int>() { 1 };
+					break;
+				case "ss":
+					hourFormat = "";
+					formatStringOrder = new List<int>() { 2 };
+					break;
+
+				default:
                     // If the format is not predefined, dynamically determine the format order
                     formatStringOrder = GetCustomFormatOrder(CultureInfo.CurrentUICulture.DateTimeFormat.ShortTimePattern, out hourFormat);
                     break;
