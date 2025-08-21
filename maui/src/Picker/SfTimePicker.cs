@@ -1048,7 +1048,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
                     break;
                 case 2:
                     {
-                        int seconds = 0;
+						int seconds = 0;
                         if (_secondColumn.ItemsSource != null && _secondColumn.ItemsSource is ObservableCollection<string> secondCollection && secondCollection.Count > e.NewValue)
                         {
                             //// Get the seconds value based on the selected index changes value.
@@ -1508,7 +1508,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
             index = formatStringOrder.IndexOf(2);
             if (index != -1 && ((currentSelectedTime.Hour == oldTime.Value.Hours && currentSelectedTime.Minute == oldTime.Value.Minutes) || (currentSelectedTime.Hour == newTime.Value.Hours && currentSelectedTime.Minute == newTime.Value.Minutes)))
             {
-                ObservableCollection<string> seconds = TimePickerHelper.GetSeconds(SecondInterval, currentSelectedTime.Hour, currentSelectedTime.Minute, null, null, null);
+                ObservableCollection<string> seconds = TimePickerHelper.GetSeconds(SecondInterval, currentSelectedTime.Hour, currentSelectedTime.Minute, currentSelectedTime, minimumTime, maximumTime);
                 ObservableCollection<string> previousSeconds = _secondColumn.ItemsSource is ObservableCollection<string> previousSecondCollection ? previousSecondCollection : new ObservableCollection<string>();
                 if (!PickerHelper.IsCollectionEquals(seconds, previousSeconds))
                 {

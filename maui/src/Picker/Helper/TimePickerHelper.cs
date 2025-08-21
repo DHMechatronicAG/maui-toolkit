@@ -23,7 +23,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
                 return false;
             }
 
-            return time.Value.Hours == other.Value.Hours && time.Value.Minutes == other.Value.Minutes && time.Value.Seconds == other.Value.Seconds;
+            return time.Value.Hours == other.Value.Hours && time.Value.Minutes == other.Value.Minutes && time.Value.Seconds == other.Value.Seconds && time.Value.Milliseconds == other.Value.Milliseconds;
         }
 
         /// <summary>
