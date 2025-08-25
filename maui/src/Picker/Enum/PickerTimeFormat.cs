@@ -17,10 +17,15 @@
         /// </summary>
         H_mm_ss,
 
-        /// <summary>
-        /// Represents the hour, minute, second, and AM/PM designator in h mm ss tt format.
-        /// </summary>
-        h_mm_ss_tt,
+		/// <summary>
+		/// Represents the hour, minute, second and tenth-second in H mm ss f format.
+		/// </summary>
+		H_mm_ss_f,
+
+		/// <summary>
+		/// Represents the hour, minute, second, and AM/PM designator in h mm ss tt format.
+		/// </summary>
+		h_mm_ss_tt,
 
         /// <summary>
         /// Represents the hour, minute, and AM/PM designator in h mm tt format.
@@ -37,15 +42,25 @@
         /// </summary>
         HH_mm_ss,
 
-        /// <summary>
-        /// Represents the hour, minute, second, and AM/PM designator in hh mm ss tt format.
-        /// </summary>
-        hh_mm_ss_tt,
+		/// <summary>
+		/// Represents the hour, minute, second and tenth-seconds in HH mm ss f format.
+		/// </summary>
+		HH_mm_ss_f,
 
-        /// <summary>
-        /// Represents the hour, minute, and AM/PM designator in hh mm tt format.
-        /// </summary>
-        hh_mm_tt,
+		/// <summary>
+		/// Represents the hour, minute, second, and AM/PM designator in hh mm ss tt format.
+		/// </summary>
+		hh_mm_ss_tt,
+
+		/// <summary>
+		/// Represents the hour, minute, second, tenth-second and AM/PM designator in hh mm ss f tt format.
+		/// </summary>
+		hh_mm_ss_f_tt,
+
+		/// <summary>
+		/// Represents the hour, minute, and AM/PM designator in hh mm tt format.
+		/// </summary>
+		hh_mm_tt,
 
         /// <summary>
         /// Represents the hour and AM/PM designator in hh tt format.
@@ -63,6 +78,11 @@
 		mm_ss,
 
 		/// <summary>
+		/// Represents the minute, second and tenth-seconds in mm ss f format.
+		/// </summary>
+		mm_ss_f,
+
+		/// <summary>
 		/// Represents the minutes in mm format.
 		/// </summary>
 		mm,
@@ -70,6 +90,11 @@
 		/// <summary>
 		/// Represents the seconds in ss format.
 		/// </summary>
-		ss
+		ss,
+
+		/// <summary>
+		/// Represents the second and tenth-seconds in ss f format.
+		/// </summary>
+		ss_f
 	}
 }
