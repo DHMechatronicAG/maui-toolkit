@@ -2160,7 +2160,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
 		static TimeSpan GetDefaultTimeSpan()
         {
             DateTime today = DateTime.Now;
-            return new TimeSpan(today.Hour, today.Minute, today.Second, today.Millisecond);
+            return new TimeSpan(0, today.Hour, today.Minute, today.Second, today.Millisecond);
         }
 
         /// <summary>
