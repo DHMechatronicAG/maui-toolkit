@@ -17,20 +17,20 @@
         /// </summary>
         H_mm_ss,
 
-		/// <summary>
-		/// Represents the hour, minute, second and tenth-second in H mm ss f format.
-		/// </summary>
-		H_mm_ss_f,
-
-		/// <summary>
-		/// Represents the hour, minute, second, and AM/PM designator in h mm ss tt format.
-		/// </summary>
-		h_mm_ss_tt,
-
         /// <summary>
-        /// Represents the hour, minute, and AM/PM designator in h mm tt format.
+        /// Represents the hour, minute, second, and AM/PM designator in h mm ss tt format.
         /// </summary>
-        h_mm_tt,
+        h_mm_ss_tt,
+
+		/// <summary>
+		/// Represents the hour, minute, second, and millisecond in h mm ss fff format.
+		/// </summary>
+		H_mm_ss_fff,
+
+		/// <summary>
+		/// Represents the hour, minute, and AM/PM designator in h mm tt format.
+		/// </summary>
+		h_mm_tt,
 
         /// <summary>
         /// Represents the hour and minute in HH mm format.
@@ -42,59 +42,66 @@
         /// </summary>
         HH_mm_ss,
 
-		/// <summary>
-		/// Represents the hour, minute, second and tenth-seconds in HH mm ss f format.
-		/// </summary>
-		HH_mm_ss_f,
+        /// <summary>
+        /// Represents 24-hour padded hour, minute, second, and milliseconds in <c>HH_mm_ss_fff</c> format.
+        /// Example: <c>14_05_33_089</c> for 2:05 PM, 33 seconds, and 89 milliseconds.
+        /// </summary>
+        HH_mm_ss_fff,
 
-		/// <summary>
-		/// Represents the hour, minute, second, and AM/PM designator in hh mm ss tt format.
-		/// </summary>
-		hh_mm_ss_tt,
+        /// <summary>
+        /// Represents the hour, minute, second, and AM/PM designator in hh mm ss tt format.
+        /// </summary>
+        hh_mm_ss_tt,
 
-		/// <summary>
-		/// Represents the hour, minute, second, tenth-second and AM/PM designator in hh mm ss f tt format.
-		/// </summary>
-		hh_mm_ss_f_tt,
+        /// <summary>
+        /// Represents 12-hour padded hour, minute, second, milliseconds, and AM/PM in <c>hh_mm_ss_fff_tt</c> format.
+        /// Example: <c>02_05_33_089_PM</c> for 2:05 PM, 33 seconds, and 89 milliseconds.
+        /// </summary>
+        hh_mm_ss_fff_tt,
 
-		/// <summary>
-		/// Represents the hour, minute, and AM/PM designator in hh mm tt format.
-		/// </summary>
-		hh_mm_tt,
+        /// <summary>
+        /// Represents the hour, minute, and AM/PM designator in hh mm tt format.
+        /// </summary>
+        hh_mm_tt,
 
         /// <summary>
         /// Represents the hour and AM/PM designator in hh tt format.
         /// </summary>
         hh_tt,
 
-        /// <summary>
-        /// Represents default culture based format of the Picker Time format.
-        /// </summary>
-        Default,
-
 		/// <summary>
-		/// Represents the minute, and seconds in mm ss format.
-		/// </summary>
-		mm_ss,
-
-		/// <summary>
-		/// Represents the minute, second and tenth-seconds in mm ss f format.
-		/// </summary>
-		mm_ss_f,
-
-		/// <summary>
-		/// Represents the minutes in mm format.
+		/// Represents minutes in <c>mm</c> format.
+		/// Example: <c>02</c> for 2 minutes.
 		/// </summary>
 		mm,
 
 		/// <summary>
-		/// Represents the seconds in ss format.
+		/// Represents minutes and seconds in <c>mm_ss</c> format.
+		/// Example: <c>02_45</c> for 2 minutes and 45 seconds.
+		/// </summary>
+		mm_ss,
+
+        /// <summary>
+        /// Represents minutes, seconds, and milliseconds in <c>mm_ss_fff</c> format.
+        /// Example: <c>03_12_256</c> for 3 minutes, 12 seconds, and 256 milliseconds.
+        /// </summary>
+        mm_ss_fff,
+
+		/// <summary>
+		/// Represents seconds in <c>ss</c> format.
+		/// Example: <c>15</c> for 15 seconds.
 		/// </summary>
 		ss,
 
 		/// <summary>
-		/// Represents the second and tenth-seconds in ss f format.
+		/// Represents seconds and milliseconds in <c>ss_fff</c> format.
+		/// Example: <c>15_007</c> for 15 seconds and 500 milliseconds.
 		/// </summary>
-		ss_f
-	}
+		ss_fff,
+
+        /// <summary>
+        /// Represents default culture based format of the Picker Time format.
+        /// </summary>
+        Default,
+    }
 }

@@ -104,57 +104,57 @@ namespace Syncfusion.Maui.Toolkit.Picker
             return collection;
         }
 
-		/// <summary>
-		/// Method to get the milliseconds string collection value.
-		/// </summary>
-		/// <param name="interval">The interval value.</param>
-		/// <param name="hour">The hour value.</param>
-		/// <param name="minute">The minute value.</param>
-		/// <param name="second">The second value.</param>
-		/// <param name="selectedDate">The selected date value used to compare min and max date value.</param>
-		/// <param name="minDateValue">The min date value.</param>
-		/// <param name="maxDateValue">The max date value.</param>
-		/// <returns>Returns seconds or minutes string collection.</returns>
-		internal static ObservableCollection<string> GetMilliseconds(int interval, int hour, int minute, int second, DateTime? selectedDate, DateTime? minDateValue, DateTime? maxDateValue)
-		{
-			ObservableCollection<string> collection = new ObservableCollection<string>();
-			int startIndex = 0;
-			int endIndex = 999;
+        /// <summary>
+        /// Method to get millisecond string collection value.
+        /// </summary>
+        /// <param name="interval">The interval value.</param>
+        /// <param name="hour">The hour value.</param>
+        /// <param name="minute">The minute value.</param>
+        /// <param name="second">The second value.</param>
+        /// <param name="selectedDate">The selected date value used to compare min and max date value.</param>
+        /// <param name="minDateValue">The min date value.</param>
+        /// <param name="maxDateValue">The max date value.</param>
+        /// <returns>Returns millisecond string collection.</returns>
+        internal static ObservableCollection<string> GetMilliseconds(int interval, int hour, int minute, int second, DateTime? selectedDate, DateTime? minDateValue, DateTime? maxDateValue)
+        {
+            ObservableCollection<string> collection = new ObservableCollection<string>();
+            int startIndex = 0;
+            int endIndex = 999;
 
-			if (minDateValue != null)
-			{
-				if (selectedDate != null && selectedDate.Value.Date == minDateValue.Value.Date && hour == minDateValue.Value.Hour && minute == minDateValue.Value.Minute && second == minDateValue.Value.Second)
-				{
-					startIndex = minDateValue.Value.Millisecond;
-				}
-			}
+            if (minDateValue != null)
+            {
+                if (selectedDate != null && selectedDate.Value.Date == minDateValue.Value.Date && hour == minDateValue.Value.Hour && minute == minDateValue.Value.Minute && second == minDateValue.Value.Second)
+                {
+                    startIndex = minDateValue.Value.Millisecond;
+                }
+            }
 
-			if (maxDateValue != null)
-			{
-				if (selectedDate != null && selectedDate.Value.Date == maxDateValue.Value.Date && hour == maxDateValue.Value.Hour && minute == maxDateValue.Value.Minute && second == maxDateValue.Value.Second)
-				{
-					endIndex = maxDateValue.Value.Millisecond;
-				}
-			}
+            if (maxDateValue != null)
+            {
+                if (selectedDate != null && selectedDate.Value.Date == maxDateValue.Value.Date && hour == maxDateValue.Value.Hour && minute == maxDateValue.Value.Minute && second == maxDateValue.Value.Second)
+                {
+                    endIndex = maxDateValue.Value.Millisecond;
+                }
+            }
 
-			for (int i = startIndex; i <= endIndex; i = i + interval)
-			{
-				collection.Add($"{i:000}");
-			}
+            for (int i = startIndex; i <= endIndex; i = i + interval)
+            {
+                collection.Add($"{i:000}");
+            }
 
-			return collection;
-		}
-		
-		/// <summary>
-		/// Method to get the hours string collection value.
-		/// </summary>
-		/// <param name="format">The hour format value.</param>
-		/// <param name="interval">The hour interval value.</param>
-		/// <param name="selectedDate">The selected date value.</param>
-		/// <param name="minDate">The min date value.</param>
-		/// <param name="maxDate">The max date value.</param>
-		/// <returns>Returns hours string collection.</returns>
-		internal static ObservableCollection<string> GetHours(string format, int interval, DateTime? selectedDate, DateTime? minDate, DateTime? maxDate)
+            return collection;
+            }
+
+        /// <summary>
+        /// Method to get the hours string collection value.
+        /// </summary>
+        /// <param name="format">The hour format value.</param>
+        /// <param name="interval">The hour interval value.</param>
+        /// <param name="selectedDate">The selected date value.</param>
+        /// <param name="minDate">The min date value.</param>
+        /// <param name="maxDate">The max date value.</param>
+        /// <returns>Returns hours string collection.</returns>
+        internal static ObservableCollection<string> GetHours(string format, int interval, DateTime? selectedDate, DateTime? minDate, DateTime? maxDate)
         {
             ObservableCollection<string> hours = new ObservableCollection<string>();
             if (format == "h")
@@ -293,24 +293,14 @@ namespace Syncfusion.Maui.Toolkit.Picker
             return $"{minute:00}";
         }
 
-		/// <summary>
-		/// Method to get the millisecond text for the millisecond value based on format.
-		/// </summary>
-		/// <param name="millisecond">Millisecond value.</param>
-		/// <returns>Returns millisecond string based on format.</returns>
-		internal static string GetMillisecondText(int millisecond)
-		{
-			return $"{millisecond:000}";
-		}
-
-		/// <summary>
-		/// Method to get the meridiem string collection value.
-		/// </summary>
-		/// <param name="minDate">The min date value.</param>
-		/// <param name="maxDate">The max date value.</param>
-		/// <param name="selectedDate">The selected date value.</param>
-		/// <returns>Returns meridiem string collection.</returns>
-		internal static ObservableCollection<string> GetMeridiem(DateTime? minDate, DateTime? maxDate, DateTime? selectedDate)
+        /// <summary>
+        /// Method to get the meridiem string collection value.
+        /// </summary>
+        /// <param name="minDate">The min date value.</param>
+        /// <param name="maxDate">The max date value.</param>
+        /// <param name="selectedDate">The selected date value.</param>
+        /// <returns>Returns meridiem string collection.</returns>
+        internal static ObservableCollection<string> GetMeridiem(DateTime? minDate, DateTime? maxDate, DateTime? selectedDate)
         {
             ObservableCollection<string> meridiems = new ObservableCollection<string>();
             if (minDate == null || (selectedDate != null && selectedDate.Value.Date == minDate.Value.Date && minDate.Value.Hour < 12))
@@ -324,6 +314,16 @@ namespace Syncfusion.Maui.Toolkit.Picker
             }
 
             return meridiems;
+        }
+
+        /// <summary>
+        /// Method to get the millisecond text for the millisecond value based on format.
+        /// </summary>
+        /// <param name="millisecond">millisecond value.</param>
+        /// <returns>Returns millisecond string based on format.</returns>
+        internal static string GetMillisecondText(int millisecond)
+        {
+            return $"{millisecond:000}";
         }
 
         /// <summary>
@@ -353,9 +353,24 @@ namespace Syncfusion.Maui.Toolkit.Picker
         /// <param name="collection">The string collection for minutes or seconds.</param>
         /// <param name="value">The minute or second value.</param>
         /// <returns>Returns index for the value in collection.</returns>
-        internal static int GetMinuteOrSecondIndex(ObservableCollection<string> collection, int value)
+        internal static int GetMinuteOrSecondOrMilliSecondsIndex(ObservableCollection<string> collection, int value)
         {
-            string dayString = GetMinuteOrSecondText(value);
+            if (collection.Count == 0)
+            {
+                return -1;
+            }
+
+            string text = collection[0];
+            string dayString = string.Empty;
+            if (text.Length > 2)
+            {
+                dayString = GetMillisecondText(value);
+            }
+            else
+            {
+                dayString = GetMinuteOrSecondText(value);
+            }
+
             int index = collection.IndexOf(dayString);
             if (index != -1)
             {
@@ -380,47 +395,14 @@ namespace Syncfusion.Maui.Toolkit.Picker
             return index;
         }
 
-		/// <summary>
-		/// Method to get the millisecond index value on collection.
-		/// </summary>
-		/// <param name="collection">The string collection for milliseconds.</param>
-		/// <param name="value">The millisecond value.</param>
-		/// <returns>Returns index for the value in collection.</returns>
-		internal static int GetMillisecondIndex(ObservableCollection<string> collection, int value)
-		{
-			string dayString = GetMillisecondText(value);
-			int index = collection.IndexOf(dayString);
-			if (index != -1)
-			{
-				return index;
-			}
-
-			for (int i = 0; i < collection.Count; i++)
-			{
-				string item = collection[i];
-				if (int.Parse(item) > value)
-				{
-					index = i;
-					break;
-				}
-			}
-
-			if (index == -1)
-			{
-				index = collection.Count - 1;
-			}
-
-			return index;
-		}
-
-		/// <summary>
-		/// Method to get the hour index value based on the format.
-		/// </summary>
-		/// <param name="format">The hour format.</param>
-		/// <param name="hours">The hour collection.</param>
-		/// <param name="hour">The hour value.</param>
-		/// <returns>Returns the hour index value.</returns>
-		internal static int GetHourIndex(string format, ObservableCollection<string> hours, int? hour)
+        /// <summary>
+        /// Method to get the hour index value based on the format.
+        /// </summary>
+        /// <param name="format">The hour format.</param>
+        /// <param name="hours">The hour collection.</param>
+        /// <param name="hour">The hour value.</param>
+        /// <returns>Returns the hour index value.</returns>
+        internal static int GetHourIndex(string format, ObservableCollection<string> hours, int? hour)
         {
             if (string.IsNullOrEmpty(format))
             {
@@ -500,68 +482,48 @@ namespace Syncfusion.Maui.Toolkit.Picker
                     hourFormat = "H";
                     formatStringOrder = new List<int>() { 0, 1, 2 };
                     break;
-				case "H_mm_ss_f":
-					hourFormat = "H";
-					formatStringOrder = new List<int>() { 0, 1, 2, 3 };
-					break;
-				case "HH_mm_ss":
+                case "HH_mm_ss":
                     hourFormat = "HH";
                     formatStringOrder = new List<int>() { 0, 1, 2 };
                     break;
-				case "HH_mm_ss_f":
-					hourFormat = "HH";
-					formatStringOrder = new List<int>() { 0, 1, 2, 3 };
-					break;
-				case "h_mm_ss_tt":
-                    hourFormat = "h";
+                case "HH_mm_ss_fff":
+                    hourFormat = "HH";
                     formatStringOrder = new List<int>() { 0, 1, 2, 4 };
                     break;
-				case "h_mm_ss_f_tt":
-					hourFormat = "h";
-					formatStringOrder = new List<int>() { 0, 1, 2, 3, 4 };
-					break;
-				case "hh_mm_ss_tt":
+                case "h_mm_ss_tt":
+                    hourFormat = "h";
+                    formatStringOrder = new List<int>() { 0, 1, 2, 3 };
+                    break;
+                case "hh_mm_ss_tt":
                     hourFormat = "hh";
-                    formatStringOrder = new List<int>() { 0, 1, 2, 4 };
+                    formatStringOrder = new List<int>() { 0, 1, 2, 3 };
                     break;
-				case "hh_mm_ss_f_tt":
-					hourFormat = "hh";
-					formatStringOrder = new List<int>() { 0, 1, 2, 3, 4 };
-					break;
-				case "h_mm_tt":
+                case "hh_mm_ss_fff_tt":
+                    hourFormat = "hh";
+                    formatStringOrder = new List<int>() { 0, 1, 2, 4, 3 };
+                    break;
+                case "h_mm_tt":
                     hourFormat = "h";
-                    formatStringOrder = new List<int>() { 0, 1, 4 };
+                    formatStringOrder = new List<int>() { 0, 1, 3 };
                     break;
                 case "hh_mm_tt":
                     hourFormat = "hh";
-                    formatStringOrder = new List<int>() { 0, 1, 4 };
+                    formatStringOrder = new List<int>() { 0, 1, 3 };
                     break;
                 case "hh_tt":
                     hourFormat = "hh";
-                    formatStringOrder = new List<int>() { 0, 4 };
+                    formatStringOrder = new List<int>() { 0, 3 };
                     break;
-				case "mm_ss":
-					hourFormat = "";
-					formatStringOrder = new List<int>() { 1, 2 };
-					break;
-				case "mm_ss_f":
-					hourFormat = "";
-					formatStringOrder = new List<int>() { 1, 2, 3 };
-					break;
-				case "mm":
-					hourFormat = "";
-					formatStringOrder = new List<int>() { 1 };
-					break;
-				case "ss":
-					hourFormat = "";
-					formatStringOrder = new List<int>() { 2 };
-					break;
-				case "ss_f":
-					hourFormat = "";
-					formatStringOrder = new List<int>() { 2, 3 };
-					break;
-
-				default:
+                case "mm_ss":
+                    formatStringOrder = new List<int> { 1, 2 };
+                    break;
+                case "ss_fff":
+                    formatStringOrder = new List<int> { 2, 4 };
+                    break;
+                case "mm_ss_fff":
+                    formatStringOrder = new List<int> { 1, 2, 4 };
+                    break;
+                default:
                     // If the format is not predefined, dynamically determine the format order
                     formatStringOrder = GetCustomFormatOrder(CultureInfo.CurrentUICulture.DateTimeFormat.ShortTimePattern, out hourFormat);
                     break;
@@ -599,11 +561,11 @@ namespace Syncfusion.Maui.Toolkit.Picker
             {
                 if (time < minTime)
                 {
-                    return new TimeSpan(minTime.Hours, minTime.Minutes, time.Value.Seconds);
+                    return new TimeSpan(0, minTime.Hours, minTime.Minutes, time.Value.Seconds, time.Value.Milliseconds);
                 }
                 else if (time > maxTime)
                 {
-                    return new TimeSpan(maxTime.Hours, maxTime.Minutes, time.Value.Seconds);
+                    return new TimeSpan(0, maxTime.Hours, maxTime.Minutes, time.Value.Seconds, time.Value.Milliseconds);
                 }
             }
 

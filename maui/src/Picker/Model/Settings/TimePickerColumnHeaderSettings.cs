@@ -1,5 +1,6 @@
-﻿using Syncfusion.Maui.Toolkit.Graphics.Internals;
+using Syncfusion.Maui.Toolkit.Graphics.Internals;
 using Syncfusion.Maui.Toolkit.Themes;
+using ITextElement = Syncfusion.Maui.Toolkit.Graphics.Internals.ITextElement;
 
 namespace Syncfusion.Maui.Toolkit.Picker
 {
@@ -108,27 +109,27 @@ namespace Syncfusion.Maui.Toolkit.Picker
                 "Second",
                 propertyChanged: OnSecondHeaderTextChanged);
 
-		/// <summary>
-		/// Identifies the <see cref="MillisecondHeaderText"/> dependency property.
-		/// </summary>
-		/// <value>
-		/// The identifier for <see cref="MillisecondHeaderText"/> dependency property.
-		/// </value>
-		public static readonly BindableProperty MillisecondHeaderTextProperty =
-			BindableProperty.Create(
-				nameof(MillisecondHeaderText),
-				typeof(string),
-				typeof(TimePickerColumnHeaderView),
-				"Millisecond",
-				propertyChanged: OnMillisecondHeaderTextChanged);
+        /// <summary>
+        /// Identifies the <see cref="MilliSecondHeaderText"/> dependency property.
+        /// </summary>
+        /// <value>
+        /// The identifier for <see cref="MilliSecondHeaderText"/> dependency property.
+        /// </value>
+        public static readonly BindableProperty MilliSecondHeaderTextProperty =
+            BindableProperty.Create(
+                nameof(MilliSecondHeaderText),
+                typeof(string),
+                typeof(TimePickerColumnHeaderView),
+                "MilliSecond",
+                propertyChanged: OnMilliSecondHeaderTextChanged);
 
-		/// <summary>
-		/// Identifies the <see cref="MeridiemHeaderText"/> dependency property.
-		/// </summary>
-		/// <value>
-		/// The identifier for <see cref="MeridiemHeaderText"/> dependency property.
-		/// </value>
-		public static readonly BindableProperty MeridiemHeaderTextProperty =
+        /// <summary>
+        /// Identifies the <see cref="MeridiemHeaderText"/> dependency property.
+        /// </summary>
+        /// <value>
+        /// The identifier for <see cref="MeridiemHeaderText"/> dependency property.
+        /// </value>
+        public static readonly BindableProperty MeridiemHeaderTextProperty =
             BindableProperty.Create(
                 nameof(MeridiemHeaderText),
                 typeof(string),
@@ -376,63 +377,63 @@ namespace Syncfusion.Maui.Toolkit.Picker
             set { SetValue(SecondHeaderTextProperty, value); }
         }
 
-		/// <summary>
-		/// Gets or sets the value to millisecond header text in SfTimePicker.
-		/// </summary>
-		/// <value>The default value of <see cref="TimePickerColumnHeaderView.MillisecondHeaderText"/> is "Millisecond".</value>
-		/// <example>
-		/// The following examples demonstrate how to set the second header text of the column header view.
-		/// # [XAML](#tab/tabid-13)
-		/// <code language="xaml">
-		/// <![CDATA[
-		/// <picker:SfTimePicker>
-		///     <picker:SfTimePicker.ColumnHeaderView>
-		///         <picker:TimePickerColumnHeaderView MillisecondHeaderText="millisecond" />
-		///     </picker:SfTimePicker.ColumnHeaderView>
-		/// </picker:SfTimePicker>
-		/// ]]>
-		/// </code>
-		/// # [C#](#tab/tabid-14)
-		/// <code language="C#">
-		/// SfTimePicker timePicker = new SfTimePicker();
-		/// timePicker.ColumnHeaderView = new TimePickerColumnHeaderView
-		/// {
-		///     MillisecondHeaderText = "millisecond"
-		/// };
-		/// </code>
-		/// </example>
-		public string MillisecondHeaderText
-		{
-			get { return (string)GetValue(MillisecondHeaderTextProperty); }
-			set { SetValue(MillisecondHeaderTextProperty, value); }
-		}
+        /// <summary>
+        /// Gets or sets the value to millisecond header text in SfTimePicker.
+        /// </summary>
+        /// <value>The default value of <see cref="TimePickerColumnHeaderView.MilliSecondHeaderText"/> is "MilliSecond".</value>
+        /// <example>
+        /// The following examples demonstrate how to set the millisecond header text of the column header view.
+        /// # [XAML](#tab/tabid-13)
+        /// <code language="xaml">
+        /// <![CDATA[
+        /// <picker:SfTimePicker>
+        ///     <picker:SfTimePicker.ColumnHeaderView>
+        ///         <picker:TimePickerColumnHeaderView MilliSecondHeaderText="millisecond" />
+        ///     </picker:SfTimePicker.ColumnHeaderView>
+        /// </picker:SfTimePicker>
+        /// ]]>
+        /// </code>
+        /// # [C#](#tab/tabid-14)
+        /// <code language="C#">
+        /// SfTimePicker timePicker = new SfTimePicker();
+        /// timePicker.ColumnHeaderView = new TimePickerColumnHeaderView
+        /// {
+        ///     MilliSecondHeaderText = "millisecond"
+        /// };
+        /// </code>
+        /// </example>
+        public string MilliSecondHeaderText
+        {
+            get { return (string)GetValue(MilliSecondHeaderTextProperty); }
+            set { SetValue(MilliSecondHeaderTextProperty, value); }
+        }
 
-		/// <summary>
-		/// Gets or sets the value to meridiem header text in SfTimePicker.
-		/// </summary>
-		/// <value>The default value of <see cref="TimePickerColumnHeaderView.MeridiemHeaderText"/> is string.Empty.</value>
-		/// <example>
-		/// The following examples demonstrate how to set the meridiem header text of the column header view.
-		/// # [XAML](#tab/tabid-15)
-		/// <code language="xaml">
-		/// <![CDATA[
-		/// <picker:SfTimePicker>
-		///     <picker:SfTimePicker.ColumnHeaderView>
-		///         <picker:TimePickerColumnHeaderView MeridiemHeaderText="Meridiem" />
-		///     </picker:SfTimePicker.ColumnHeaderView>
-		/// </picker:SfTimePicker>
-		/// ]]>
-		/// </code>
-		/// # [C#](#tab/tabid-16)
-		/// <code language="C#">
-		/// SfTimePicker timePicker = new SfTimePicker();
-		/// timePicker.ColumnHeaderView = new TimePickerColumnHeaderView
-		/// {
-		///     MeridiemHeaderText = "Meridiem"
-		/// };
-		/// </code>
-		/// </example>
-		public string MeridiemHeaderText
+        /// <summary>
+        /// Gets or sets the value to meridiem header text in SfTimePicker.
+        /// </summary>
+        /// <value>The default value of <see cref="TimePickerColumnHeaderView.MeridiemHeaderText"/> is string.Empty.</value>
+        /// <example>
+        /// The following examples demonstrate how to set the meridiem header text of the column header view.
+        /// # [XAML](#tab/tabid-15)
+        /// <code language="xaml">
+        /// <![CDATA[
+        /// <picker:SfTimePicker>
+        ///     <picker:SfTimePicker.ColumnHeaderView>
+        ///         <picker:TimePickerColumnHeaderView MeridiemHeaderText="Meridiem" />
+        ///     </picker:SfTimePicker.ColumnHeaderView>
+        /// </picker:SfTimePicker>
+        /// ]]>
+        /// </code>
+        /// # [C#](#tab/tabid-16)
+        /// <code language="C#">
+        /// SfTimePicker timePicker = new SfTimePicker();
+        /// timePicker.ColumnHeaderView = new TimePickerColumnHeaderView
+        /// {
+        ///     MeridiemHeaderText = "Meridiem"
+        /// };
+        /// </code>
+        /// </example>
+        public string MeridiemHeaderText
         {
             get { return (string)GetValue(MeridiemHeaderTextProperty); }
             set { SetValue(MeridiemHeaderTextProperty, value); }
@@ -519,24 +520,24 @@ namespace Syncfusion.Maui.Toolkit.Picker
             (bindable as TimePickerColumnHeaderView)?.RaisePropertyChanged(nameof(SecondHeaderText));
         }
 
-		/// <summary>
-		/// Method invokes on millisecond header text property changed.
-		/// </summary>
-		/// <param name="bindable">The column header view.</param>
-		/// <param name="oldValue">Property old value.</param>
-		/// <param name="newValue">Property new value.</param>
-		static void OnMillisecondHeaderTextChanged(BindableObject bindable, object oldValue, object newValue)
-		{
-			(bindable as TimePickerColumnHeaderView)?.RaisePropertyChanged(nameof(MillisecondHeaderText));
-		}
+        /// <summary>
+        /// Method invokes on millisecond header text property changed.
+        /// </summary>
+        /// <param name="bindable">The column header view.</param>
+        /// <param name="oldValue">Property old value.</param>
+        /// <param name="newValue">Property new value.</param>
+        static void OnMilliSecondHeaderTextChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            (bindable as TimePickerColumnHeaderView)?.RaisePropertyChanged(nameof(MilliSecondHeaderText));
+        }
 
-		/// <summary>
-		/// Method invokes on meridiem header text property changed.
-		/// </summary>
-		/// <param name="bindable">The column header view.</param>
-		/// <param name="oldValue">Property old value.</param>
-		/// <param name="newValue">Property new value.</param>
-		static void OnMeridiemHeaderTextChanged(BindableObject bindable, object oldValue, object newValue)
+        /// <summary>
+        /// Method invokes on meridiem header text property changed.
+        /// </summary>
+        /// <param name="bindable">The column header view.</param>
+        /// <param name="oldValue">Property old value.</param>
+        /// <param name="newValue">Property new value.</param>
+        static void OnMeridiemHeaderTextChanged(BindableObject bindable, object oldValue, object newValue)
         {
             (bindable as TimePickerColumnHeaderView)?.RaisePropertyChanged(nameof(MeridiemHeaderText));
         }
