@@ -22,15 +22,10 @@
         /// </summary>
         h_mm_ss_tt,
 
-		/// <summary>
-		/// Represents the hour, minute, second, and millisecond in h mm ss fff format.
-		/// </summary>
-		H_mm_ss_fff,
-
-		/// <summary>
-		/// Represents the hour, minute, and AM/PM designator in h mm tt format.
-		/// </summary>
-		h_mm_tt,
+        /// <summary>
+        /// Represents the hour, minute, and AM/PM designator in h mm tt format.
+        /// </summary>
+        h_mm_tt,
 
         /// <summary>
         /// Represents the hour and minute in HH mm format.
@@ -69,17 +64,11 @@
         /// </summary>
         hh_tt,
 
-		/// <summary>
-		/// Represents minutes in <c>mm</c> format.
-		/// Example: <c>02</c> for 2 minutes.
-		/// </summary>
-		mm,
-
-		/// <summary>
-		/// Represents minutes and seconds in <c>mm_ss</c> format.
-		/// Example: <c>02_45</c> for 2 minutes and 45 seconds.
-		/// </summary>
-		mm_ss,
+        /// <summary>
+        /// Represents minutes and seconds in <c>mm_ss</c> format.
+        /// Example: <c>02_45</c> for 2 minutes and 45 seconds.
+        /// </summary>
+        mm_ss,
 
         /// <summary>
         /// Represents minutes, seconds, and milliseconds in <c>mm_ss_fff</c> format.
@@ -87,17 +76,11 @@
         /// </summary>
         mm_ss_fff,
 
-		/// <summary>
-		/// Represents seconds in <c>ss</c> format.
-		/// Example: <c>15</c> for 15 seconds.
-		/// </summary>
-		ss,
-
-		/// <summary>
-		/// Represents seconds and milliseconds in <c>ss_fff</c> format.
-		/// Example: <c>15_007</c> for 15 seconds and 500 milliseconds.
-		/// </summary>
-		ss_fff,
+        /// <summary>
+        /// Represents seconds and milliseconds in <c>ss_fff</c> format.
+        /// Example: <c>15_007</c> for 15 seconds and 500 milliseconds.
+        /// </summary>
+        ss_fff,
 
         /// <summary>
         /// Represents default culture based format of the Picker Time format.
