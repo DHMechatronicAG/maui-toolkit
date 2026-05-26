@@ -95,6 +95,12 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
     	/// </summary>
     	double _endTouchY;
 
+		/// <summary>
+		/// Indicates whether the current gesture started in the grabber area.
+		/// Used to track if SwipeFromHeaderOnly should process this gesture.
+		/// </summary>
+		bool _gestureStartedInGrabber = true;
+
     	// Event args
     	/// <summary>
     	/// Event arguments used to track state changes in the bottom sheet.
@@ -175,6 +181,16 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 		/// The default ratio value for the full-expanded.
 		/// </summary>
 		const double DefaultFullExpandedRatio = 1;
+
+		/// <summary>
+		/// Stores original accessibility Description and Hint for each VisualElement.
+		/// Key: VisualElement, Value: Tuple of (Description, Hint)
+		/// </summary>
+		Dictionary<VisualElement, (string? Description, string? Hint)> _originalAccessibilityProperties = new Dictionary<VisualElement, (string?, string?)>();
+		
+		#if ANDROID
+		Dictionary<VisualElement, string?> _androidContentDescriptions  = new Dictionary<VisualElement, string?>();
+		#endif
 
 		#endregion
 
@@ -422,6 +438,19 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 		    typeof(SfBottomSheet), 
 		    true,
 		    BindingMode.Default);
+
+		/// <summary>
+		/// Identifies the <see cref="SwipeFromHeaderOnly"/> bindable property.
+		/// </summary>
+		/// <value>
+		/// The identifier for <see cref="SwipeFromHeaderOnly"/> bindable property.
+		/// </value>
+		public static readonly BindableProperty SwipeFromHeaderOnlyProperty = BindableProperty.Create(
+			nameof(SwipeFromHeaderOnly),
+			typeof(bool),
+			typeof(SfBottomSheet),
+			false,
+			BindingMode.Default);
 
 		// Grabber customization
 		/// <summary>
@@ -1049,6 +1078,42 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 		}
 
 		/// <summary>
+		/// Gets or sets a value indicating whether swipe gestures are restricted to the Header/Grabber area only.
+		/// </summary>
+		/// <value>
+		/// A <see cref="bool"/> value. The default value is <c>false</c>.
+		/// </value>
+		/// <remarks>
+		/// When set to <c>true</c>, swipe gestures are recognized only when initiated from the Header/Grabber area.
+		/// This prevents gesture conflicts with interactive content inside the BottomSheet (e.g., scrolling lists, zooming images).
+		/// When set to <c>false</c> (default), swipe gestures can be initiated from anywhere within the BottomSheet.
+		/// This property only has effect when <see cref="EnableSwiping"/> is <c>true</c>.
+		/// </remarks>
+		/// <example>
+		/// Below is an example of how to configure the <see cref="SwipeFromHeaderOnly"/> property using XAML and C#:
+		/// 
+		/// # [XAML](#tab/tabid-1)
+		/// <code Lang="XAML"><![CDATA[
+		/// <bottomSheet:SfBottomSheet x:Name="bottomSheet" EnableSwiping="True" SwipeFromHeaderOnly="True"/>
+		/// ]]></code>
+		/// 
+		/// # [C#](#tab/tabid-2)
+		/// <code Lang="C#"><![CDATA[
+		/// SfBottomSheet bottomSheet = new SfBottomSheet();
+		/// bottomSheet.EnableSwiping = true;
+		/// bottomSheet.SwipeFromHeaderOnly = true;
+		/// Content = bottomSheet;
+		/// ]]></code>
+		/// 
+		/// ***
+		/// </example>
+		public bool SwipeFromHeaderOnly
+		{
+			get => (bool)GetValue(SwipeFromHeaderOnlyProperty);
+			set => SetValue(SwipeFromHeaderOnlyProperty, value);
+		}
+
+		/// <summary>
 		/// Gets or sets the height of the grabber in SfBottomSheet.
 		/// </summary>
 		/// <value>
@@ -1262,6 +1327,11 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 			SetupBottomSheetForShow();
 			AnimateBottomSheet(GetTargetPosition());
 			IsOpen = true;
+
+#if !MACCATALYST && IOS
+			UpdateAccessibilityiOS();
+#endif
+
 		}
 
 		/// <summary>
@@ -1281,6 +1351,12 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 		    {
 		        _bottomSheet.IsVisible = false;
 				RemoveOverlayFromView();
+				
+				// ACCESSIBILITY FIX: Restore accessibility after close
+#if !MACCATALYST && IOS
+				UpdateAccessibilityiOS();
+#endif
+
 			});
 
 			if (_isSheetOpen)
@@ -1301,6 +1377,14 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 		{
 			return (int)Math.Max(0, AnimationDuration);
 		}
+		
+#if !MACCATALYST && IOS
+		/// <summary>
+		/// Platform-specific: iOS/macOS accessibility updates.
+		/// Implementation is in SfBottomSheet.iOS.cs
+		/// </summary>
+		partial void UpdateAccessibilityiOS();
+#endif
 
 		#endregion
 
@@ -1318,8 +1402,27 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 		/// <summary>
 		/// Handles touch-related logic for the bottom sheet.
 		/// </summary>
-		/// <param name="action">The pointer action.</param>
 		/// <param name="point">The touch point.</param>
+		/// <summary>
+		/// Determines whether the touch point is within the grabber (header) area.
+		/// </summary>
+		/// <returns>True if the touch is within the grabber area; otherwise, false.</returns>
+		internal bool IsTouchInGrabberArea(Point point)
+		{
+			if (_grabberGrid is null || !_grabberGrid.IsVisible)
+			{
+				// If grabber is not visible, allow touches from anywhere for backward compatibility
+				return true;
+			}
+
+			// The grabber is always at the top of the bottom sheet
+			// Touch point Y should be between 0 and grabber height
+			// Add small margin (3 pixels) to avoid edge ambiguity
+			double grabberHeight = GrabberAreaHeight + 3;
+
+			return point.Y >= 0 && point.Y <= grabberHeight;
+		}
+
 		internal void OnHandleTouch(PointerActions action, Point point)
 		{
 		    if (!EnableSwiping || !_isSheetOpen || _bottomSheet is null)
@@ -1327,21 +1430,48 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 		        return;
 		    }
 
-		    double touchY = GetPlatformAdjustedTouchY(point);
-
 		    switch (action)
 		    {
 		        case PointerActions.Pressed:
-		            HandleTouchPressed(touchY);
+		            // Check if gesture starts in grabber area
+		            if (SwipeFromHeaderOnly)
+		            {
+		                _gestureStartedInGrabber = IsTouchInGrabberArea(point);
+		                if (!_gestureStartedInGrabber)
+		                {
+		                    // Gesture started outside grabber - don't process
+		                    return;
+		                }
+		            }
+		            else
+		            {
+		                _gestureStartedInGrabber = true; // If not restricted, always allow
+		            }
+
+		            HandleTouchPressed(GetPlatformAdjustedTouchY(point));
 		            return;
+
 		        case PointerActions.Moved:
-		            HandleTouchMoved(touchY);
+		            // Only process move if gesture started in allowed area
+		            if (!_gestureStartedInGrabber)
+		            {
+		                return;
+		            }
+		            HandleTouchMoved(GetPlatformAdjustedTouchY(point));
 		            return;
+
 		        case PointerActions.Released:
-		            HandleTouchReleased(touchY);
+		            // Only process release if gesture started in allowed area
+		            if (!_gestureStartedInGrabber)
+		            {
+		                _gestureStartedInGrabber = true; // Reset for next gesture
+		                return;
+		            }
+		            HandleTouchReleased(GetPlatformAdjustedTouchY(point));
+		            _gestureStartedInGrabber = true; // Reset for next gesture
 		            return;
+
 		        default:
-		            // Log or handle unexpected action
 		            return;
 		    }
 		}
@@ -1375,6 +1505,15 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 		{
 			Children.Clear();
 			_isOverlayAdded = false; // Reset overlay state
+			if (IsOpen && IsModal)
+			{
+				UpdateContentAccessibility(Content, true);
+			}
+			else
+			{
+				UpdateContentAccessibility(Content, false);
+			}
+
 			UpdateAllChild();
 		}
 
@@ -1385,6 +1524,125 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 		{
 			AddChild(Content);
 			AddChild(_bottomSheet);
+		}
+
+		/// <summary>
+		/// Recursively updates the SemanticProperties.ExcludeFromAccessibility for a given VisualElement and its descendants.
+		/// </summary>
+		/// <param name="element">The VisualElement to update.</param>
+		/// <param name="exclude">True to exclude from accessibility, false to include.</param>
+		void UpdateContentAccessibility(VisualElement element, bool exclude)
+		{
+			if (element == null)
+			{
+				return;
+			}
+
+			// If it's a layout, iterate through its children
+			if (element is Layout layout)
+			{
+				foreach (var child in layout.Children)
+				{
+					if (child is VisualElement visualChild)
+					{
+						UpdateSingleElement(visualChild,exclude);
+					}
+				}
+			}
+			// If it's a ContentView, recurse into its Content
+			else if (element is IContentView contentView && contentView.Content is Layout contentLayout)
+			{
+				foreach (var child in contentLayout.Children)
+				{
+					if (child is VisualElement visualChild)
+					{
+						UpdateSingleElement(visualChild,exclude);
+					}
+				}
+			}
+			else
+			{
+				// For any other VisualElement, update it directly
+				UpdateSingleElement(element,exclude);
+			}
+		}
+
+		/// <summary>
+        /// Updates the accessibility properties (Description and Hint) of a single VisualElement based on exclusion state.
+        /// </summary>
+        /// <param name="visualChild">The VisualElement to update.</param>
+        /// <param name="exclude">True to exclude from accessibility, false to include.</param>
+		void UpdateSingleElement(VisualElement visualChild,bool exclude)
+		{
+			if (!_originalAccessibilityProperties.ContainsKey(visualChild))
+			{
+				// Store original values only if not already stored
+				_originalAccessibilityProperties[visualChild] = (
+					SemanticProperties.GetDescription(visualChild),
+					SemanticProperties.GetHint(visualChild)
+				);
+			}
+
+			if (exclude)
+			{
+				// Exclude: Set to null to blank for screen readers
+				SemanticProperties.SetDescription(visualChild, null);
+				SemanticProperties.SetHint(visualChild, null);
+			}
+			else
+			{
+				// Reset: Restore original values
+				var (originalDesc, originalHint) = _originalAccessibilityProperties[visualChild];
+				SemanticProperties.SetDescription(visualChild, originalDesc);
+				SemanticProperties.SetHint(visualChild, originalHint);
+			}
+
+			// Update accessibility flags
+			AutomationProperties.SetIsInAccessibleTree(visualChild, !exclude);
+			AutomationProperties.SetExcludedWithChildren(visualChild, exclude);
+
+			#if IOS || MACCATALYST
+			if (visualChild.Handler?.PlatformView is UIKit.UIView nativeView)
+			{
+				nativeView.UserInteractionEnabled = !exclude;
+			}
+
+			#endif
+			#if WINDOWS
+			if (visualChild.Handler?.PlatformView is Microsoft.UI.Xaml.UIElement ui)
+			{
+				ui.IsTabStop = !exclude;  // Removes/adds from tab order
+			}
+			#endif
+
+			#if ANDROID
+			var nativeContent = Content?.Handler?.PlatformView as Android.Views.View;
+			if (nativeContent is Android.Views.View rootView)
+			{
+					if (Content != null && !_androidContentDescriptions.ContainsKey(Content))
+					{
+						_androidContentDescriptions[Content] =
+							rootView.ContentDescription;
+					}
+
+				if (exclude) // when you want to hide content
+				{
+					rootView.ImportantForAccessibility =
+						Android.Views.ImportantForAccessibility.NoHideDescendants;
+
+					rootView.ContentDescription = null; // extra safety
+				}
+				else
+				{
+					rootView.ImportantForAccessibility =
+						Android.Views.ImportantForAccessibility.Auto;
+					if (Content != null && _androidContentDescriptions.TryGetValue(Content, out var originalDesc))
+					{
+						rootView.ContentDescription = originalDesc;
+					}
+				}
+			}
+			#endif
 		}
 
 		/// <summary>
@@ -1505,6 +1763,7 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 					Children.Insert(Children.Count - 1, _overlayGrid); // Insert before bottom sheet
 				}
 				_isOverlayAdded = true;
+				UpdateContentAccessibility(Content, true);
 			}
 		}
 
@@ -1520,6 +1779,7 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 					Children.Remove(_overlayGrid);
 				}
 				_isOverlayAdded = false;
+				UpdateContentAccessibility(Content, false);
 			}
 		}
 
@@ -2178,11 +2438,10 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 			}
 
 			int animationDuration = this.GetClampedAnimationDuration();
-		    const int topPadding = 2;
 			_isSheetOpen = true;
 			if (_bottomSheet is not null)
 			{
-				var bottomSheetAnimation = new Animation(d => _bottomSheet.TranslationY = d, _bottomSheet.TranslationY, targetPosition + topPadding);
+				var bottomSheetAnimation = new Animation(d => _bottomSheet.TranslationY = d, _bottomSheet.TranslationY, targetPosition );
 				_bottomSheet?.Animate("bottomSheetAnimation", bottomSheetAnimation, length: (uint)animationDuration, easing: Easing.Linear, finished: (v, e) =>
 				{
 					UpdateBottomSheetHeight();

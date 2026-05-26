@@ -36,6 +36,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
             Assert.Null(picker.AcceptCommand);
             Assert.Null(picker.DeclineCommand);
             Assert.Null(picker.SelectionChangedCommand);
+            Assert.False(picker.IsSelectionImmediate);
         }
 
         [Theory]
@@ -547,6 +548,17 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 
             Assert.True(commandExecuted);
             Assert.Same(expectedValue, actualValue);
+        }
+
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void TimePicker_IsSelectionImmediate_GetAndSet(bool expectedValue)
+        {
+            SfTimePicker picker = new SfTimePicker();
+            picker.IsSelectionImmediate = expectedValue;
+            bool actualValue = picker.IsSelectionImmediate;
+            Assert.Equal(expectedValue, actualValue);
         }
 
         #endregion
@@ -2317,7 +2329,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
             Assert.Equal("15", seconds[1]);
             Assert.Equal("30", seconds[2]);
             Assert.Equal("45", seconds[3]);
-            Assert.Equal(0, result.SelectedIndex);
+            Assert.Equal(2, result.SelectedIndex);
         }
 
         [Fact]
@@ -2347,7 +2359,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
             Assert.Equal(9, seconds.Count);
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
             Assert.Equal("28", seconds[4]);
-            Assert.Equal(0, result.SelectedIndex);
+            Assert.Equal(4, result.SelectedIndex);
         }
 
         [Fact]
@@ -2366,7 +2378,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
             Assert.Equal("00", seconds[0]);
             Assert.Equal("30", seconds[1]);
-            Assert.Equal(0, result.SelectedIndex);
+            Assert.Equal(1, result.SelectedIndex);
         }
 
         [Fact]

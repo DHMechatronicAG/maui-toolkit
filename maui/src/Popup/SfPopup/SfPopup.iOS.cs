@@ -3,6 +3,7 @@ using CoreGraphics;
 using Foundation;
 using Microsoft.Maui.Controls.Platform;
 using Microsoft.Maui.Platform;
+using Syncfusion.Maui.Toolkit.Internals;
 using UIKit;
 
 namespace Syncfusion.Maui.Toolkit.Popup
@@ -15,6 +16,7 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		#region Fields
 		NSObject? _keyboardShow;
 		NSObject? _keyboardHide;
+		private UITapGestureRecognizer? rootTapRecognizer;
 
 		/// <summary>
 		/// This field stores the blur effect view added by this popup.
@@ -45,6 +47,24 @@ namespace Syncfusion.Maui.Toolkit.Popup
 
 		#endregion
 
+		#region Constructor
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="SfPopup"/> class for native iOS embedding scenarios where a MAUI Window is not available.
+		/// </summary>
+		/// <param name="window">The external <see cref="UIWindow"/> that hosts the popup when no MAUI Window exists.</param>
+		/// <param name="mauiContext">The <see cref="IMauiContext"/> providing access to MAUI services in native iOS embedding.</param>
+		public SfPopup(UIWindow window, IMauiContext mauiContext)
+			: this()
+		{
+			Syncfusion.Maui.Toolkit.Internals.SfWindowOverlay.MauiContext = mauiContext;
+			Syncfusion.Maui.Toolkit.Internals.SfWindowOverlay.Window = window;
+
+			// Try initializing overlay again with external host available.
+			this.InitializeOverlay();
+		}
+		#endregion
+
 		#region Internal Methods
 
 		/// <summary>
@@ -67,11 +87,17 @@ namespace Syncfusion.Maui.Toolkit.Popup
 				}
 				else
 				{
-					windowPage.SizeChanged += OnMainPageSizeChanged;
+					windowPage.SizeChanged += this.OnMainPageSizeChanged;
+
+					// In native embedding, handle orientation and display changes by listening to <see cref="Microsoft.Maui.Devices.DeviceDisplay.MainDisplayInfoChanged"/>.
+					DeviceDisplay.MainDisplayInfoChanged += this.OnMainPageSizeChanged;
 				}
 			}
 
 			WireKeyboardNotification();
+
+			// Enable pass-through touches and outside-tap close when ShowOverlayAlways is false
+			this.AddRootTapRecognizer();
 		}
 
 		/// <summary>
@@ -94,12 +120,17 @@ namespace Syncfusion.Maui.Toolkit.Popup
 				}
 				else
 				{
-					windowPage.SizeChanged -= OnMainPageSizeChanged;
+					windowPage.SizeChanged -= this.OnMainPageSizeChanged;
+
+					// Unwire orientation/display change handler.
+					DeviceDisplay.MainDisplayInfoChanged -= this.OnMainPageSizeChanged;
 				}
 			}
 
 			_keyboardHide?.Dispose();
 			_keyboardShow?.Dispose();
+
+			this.RemoveRootTapRecognizer();
 		}
 
 		/// <summary>
@@ -206,7 +237,7 @@ namespace Syncfusion.Maui.Toolkit.Popup
 				SyncPopupDimensionFields();
 
 				// While show the popup using ShowRelativeToView, Popup is not positioned properly when resize the window in MAC and Split the screen in iOS.
-				if (_relativeView is not null)
+				if (_relativeView is not null || this.RelativeView is not null)
 				{
 					Dispatcher.Dispatch(ResetPopupWidthHeight);
 				}
@@ -222,6 +253,134 @@ namespace Syncfusion.Maui.Toolkit.Popup
 				}
 
 				_popupView.InvalidateForceLayout();
+			}
+		}
+
+		/// <summary>
+		/// Adds a root-level tap recognizer on the key window to detect taps outside the popup
+		/// when ShowOverlayAlways is false. Does not cancel touches so underlying views remain interactive.
+		/// </summary>
+		private void AddRootTapRecognizer()
+		{
+			if (this.ShowOverlayAlways || !this.IsOpen)
+			{
+				return;
+			}
+
+			// Resolve current key window (multi-window aware)
+			UIWindow? keyWindow = PopupExtension.GetActiveWindow();
+			var root = (UIView?)(keyWindow ?? WindowOverlayHelper._platformRootView);
+			if (root == null)
+			{
+				return;
+			}
+
+			// If an existing recognizer is attached to a different root, remove it first
+			if (this.rootTapRecognizer != null)
+			{
+				var previousView = this.rootTapRecognizer.View;
+				if (previousView != null && previousView != root)
+				{
+					previousView.RemoveGestureRecognizer(this.rootTapRecognizer);
+				}
+
+				this.rootTapRecognizer.Dispose();
+				this.rootTapRecognizer = null;
+			}
+
+			this.rootTapRecognizer = new UITapGestureRecognizer(g =>
+			{
+				// Only the topmost popup should respond to outside taps.
+				if (PopupExtension.TopMostOpenPopup != this)
+				{
+					return;
+				}
+
+				if (!this.IsOpen || this._popupView == null || this.StaysOpen)
+				{
+					return;
+				}
+
+				var currentRoot = (UIView?)(WindowOverlayHelper._platformRootView ?? keyWindow ?? PopupExtension.GetActiveWindow());
+				if (currentRoot == null)
+				{
+					return;
+				}
+
+				if (this._popupView.Handler?.PlatformView is UIView popupNative)
+				{
+					var origin = popupNative.ConvertPointToView(new CGPoint(0, 0), currentRoot);
+					var rect = new CGRect(origin.X, origin.Y, popupNative.Bounds.Width, popupNative.Bounds.Height);
+					var location = g.LocationInView(currentRoot);
+					bool inside = rect.Contains(location);
+					if (!inside)
+					{
+						if (!this.RaisePopupClosingEvent())
+						{
+							// Close immediately so underlying control can still receive the tap
+							this.IsOpen = false;
+						}
+					}
+				}
+			})
+			{
+				CancelsTouchesInView = false,
+				DelaysTouchesBegan = false,
+				DelaysTouchesEnded = false,
+			};
+
+			// Allow recognizing simultaneously so the tap on underlying control still fires
+			this.rootTapRecognizer.ShouldRecognizeSimultaneously += (gesture, other) => true;
+			
+			// Reject touches that began inside the popup so the root recognizer does not also treat the same tap as an outside-tap and close the popup.
+            this.rootTapRecognizer.ShouldReceiveTouch += (recognizer, touch) =>
+            {
+                try
+                {
+                    var currentRoot = (UIView?)(WindowOverlayHelper._platformRootView ?? keyWindow ?? PopupExtension.GetActiveWindow());
+                    if (currentRoot == null)
+                    {
+                        return true;
+                    }
+
+                    if (this._popupView?.Handler?.PlatformView is UIView popupNative)
+                    {
+                        // Convert popup origin to the root coordinate space and test containment.
+                        var origin = popupNative.ConvertPointToView(new CGPoint(0, 0), currentRoot);
+                        var rect = new CGRect(origin.X, origin.Y, popupNative.Bounds.Width, popupNative.Bounds.Height);
+                        var location = touch.LocationInView(currentRoot);
+                        if (rect.Contains(location))
+                        {
+                            // Touch began inside popup - do not let root recognizer handle it.
+                            return false;
+                        }
+                    }
+                }
+                catch
+                {
+                    // If anything goes wrong, fall back to allowing the recognizer to receive the touch.
+                }
+
+                return true;
+            };
+
+			root.AddGestureRecognizer(this.rootTapRecognizer);
+		}
+
+		/// <summary>
+		/// Removes the root-level tap recognizer.
+		/// </summary>
+		private void RemoveRootTapRecognizer()
+		{
+			// Resolve current key window to remove recognizer from active root
+			UIWindow? keyWindow = PopupExtension.GetActiveWindow();
+			var root = (UIView?)(keyWindow ?? WindowOverlayHelper._platformRootView);
+			
+			if (root != null && this.rootTapRecognizer != null)
+			{
+				root.RemoveGestureRecognizer(this.rootTapRecognizer);
+				this.rootTapRecognizer.Dispose();
+				this.rootTapRecognizer = null;
 			}
 		}
 	}
