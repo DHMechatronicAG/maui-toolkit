@@ -193,6 +193,12 @@ namespace Syncfusion.Maui.Toolkit.Platform
 		public override void LayoutSubviews()
 		{
 			base.LayoutSubviews();
+#if MACCATALYST && NET10_0_OR_GREATER
+			// MauiView already measures and arranges the virtual view. A second pass
+			// with native bounds replaces the parent's scroll constraints and can
+			// repeatedly invalidate the layout on Mac Catalyst.
+			UpdateGraphicsViewBounds();
+#else
 			if (View is not ILayout layout)
 			{
 				return;
@@ -224,10 +230,15 @@ namespace Syncfusion.Maui.Toolkit.Platform
 
 			layout.CrossPlatformArrange(bounds);
 			UpdateGraphicsViewBounds();
+#endif
 		}
 
 		public override CGSize SizeThatFits(CGSize size)
 		{
+#if MACCATALYST && NET10_0_OR_GREATER
+			// Preserve MAUI's measurement cache and safe-area handling.
+			return base.SizeThatFits(size);
+#else
 			if (View is not ILayout layout)
 			{
 				return base.SizeThatFits(size);
@@ -239,6 +250,7 @@ namespace Syncfusion.Maui.Toolkit.Platform
 			var crossPlatformSize = layout.CrossPlatformMeasure(width, height);
 
 			return crossPlatformSize.ToCGSize();
+#endif
 		}
 
 		/// <summary>
@@ -427,12 +439,24 @@ namespace Syncfusion.Maui.Toolkit.Platform
 		{
 			if (_nativeGraphicsView != null)
 			{
+#if MACCATALYST && NET10_0_OR_GREATER
+				// A layout pass is not a content change. Only resize/redraw the
+				// overlay when its frame changes; property changes already use
+				// InvalidateDrawable. Unconditional drawing here can feed back
+				// into layout through the controls' draw callbacks.
+				if (_nativeGraphicsView.Frame != Bounds)
+				{
+					_nativeGraphicsView.Frame = Bounds;
+					_nativeGraphicsView.InvalidateDrawable();
+				}
+#else
 				if (_nativeGraphicsView.Bounds != Bounds)
 				{
 					_nativeGraphicsView.Frame = Bounds;
 				}
 
 				_nativeGraphicsView.InvalidateDrawable();
+#endif
 			}
 		}
 

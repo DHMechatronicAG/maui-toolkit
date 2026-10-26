@@ -11,6 +11,20 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 	public partial class SfTextInputLayout
 	{
 
+		// Drawing and measuring both update child positions. MAUI can invalidate
+		// native measurement when bounds are set, so avoid repeating an unchanged
+		// assignment from a draw callback on Mac Catalyst.
+		static void SetChildLayoutBounds(BindableObject child, Rect bounds)
+		{
+#if MACCATALYST && NET10_0_OR_GREATER
+			if (AbsoluteLayout.GetLayoutBounds(child) == bounds)
+			{
+				return;
+			}
+#endif
+			AbsoluteLayout.SetLayoutBounds(child, bounds);
+		}
+
 		#region Public Methods
 
 		/// <summary>
@@ -309,7 +323,7 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 		void UpdateUpDownButtonViewPosition(View view, RectF position)
 		{
 			view.Measure(position.Width, position.Height);
-			AbsoluteLayout.SetLayoutBounds(view, position);
+			SetChildLayoutBounds(view, position);
 		}
 
 		/// <summary>
@@ -1082,7 +1096,7 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 
 				if (_viewBounds.Height >= 0 || _viewBounds.Width >= 0)
 				{
-					AbsoluteLayout.SetLayoutBounds(Content, _viewBounds);
+					SetChildLayoutBounds(Content, _viewBounds);
 				}
 			}
 		}
@@ -1138,7 +1152,7 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 
 				if (_viewBounds.Height >= 0 || _viewBounds.Width >= 0)
 				{
-					AbsoluteLayout.SetLayoutBounds(LeadingView, _viewBounds);
+					SetChildLayoutBounds(LeadingView, _viewBounds);
 				}
 			}
 		}
@@ -1172,7 +1186,7 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 
 				if (_viewBounds.Height >= 0 || _viewBounds.Width >= 0)
 				{
-					AbsoluteLayout.SetLayoutBounds(TrailingView, _viewBounds);
+					SetChildLayoutBounds(TrailingView, _viewBounds);
 				}
 			}
 		}
@@ -2373,7 +2387,7 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 #if ANDROID
 					UpdateLabelAccessibilityImportance(_helperLabel, true);
 #endif
-					AbsoluteLayout.SetLayoutBounds(_helperLabel, _helperTextRect);
+					SetChildLayoutBounds(_helperLabel, _helperTextRect);
 				}
 				else
 				{
@@ -2396,7 +2410,7 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 #if ANDROID
 					UpdateLabelAccessibilityImportance(_errorLabel, true);
 #endif
-					AbsoluteLayout.SetLayoutBounds(_errorLabel, _errorTextRect);
+					SetChildLayoutBounds(_errorLabel, _errorTextRect);
 				}
 				else
 				{
