@@ -189,7 +189,7 @@ namespace Syncfusion.Maui.Toolkit.Popup
 			{
 				// PopUp is drawn in safe area also crap when it is shown based on relative to view point.
 				// Fix Details: SafeArea is calculated only for iOS X simulator in iOS.
-#if NET10_0
+#if NET10_0_OR_GREATER
 				if (GetSafeAreaEdges())
 #else
 				if (Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific.Page.GetUseSafeArea(GetMainPage()))
@@ -422,7 +422,7 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		{
 			if (WindowOverlayHelper._window != null)
 			{
-#if NET10_0
+#if NET10_0_OR_GREATER
 				if (GetMainPage() != null && GetMainPage() is ContentPage page && page.SafeAreaEdges != SafeAreaEdges.None)
 				{
 					return true;

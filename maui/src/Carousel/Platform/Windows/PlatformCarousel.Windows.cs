@@ -3455,7 +3455,7 @@ namespace Syncfusion.Maui.Toolkit.Carousel
 					}
 					else
 					{
-#if NET10_0
+#if NET10_0_OR_GREATER
 						templateLayout = ((View)templateInstance);
 #else
 						templateLayout = ((ViewCell)templateInstance).View;

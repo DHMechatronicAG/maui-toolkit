@@ -113,21 +113,21 @@ namespace Syncfusion.Maui.Toolkit.Calendar
                 Add(_headerTextLabel);
                 AddOrRemoveNavigationArrows();
             }
-#if (IOS || ANDROID) && NET10_0
+#if (IOS || ANDROID) && NET10_0_OR_GREATER
             this.SafeAreaEdges = SafeAreaEdges.None;
 #elif IOS
             this.IgnoreSafeArea = true;
 #endif
 		}
 
-        #endregion
+		#endregion
 
-        #region Internal Methods
+		#region Internal Methods
 
-        /// <summary>
-        /// Method to update the header template dynamically.
-        /// </summary>
-        internal void InvalidateHeaderTemplate()
+		/// <summary>
+		/// Method to update the header template dynamically.
+		/// </summary>
+		internal void InvalidateHeaderTemplate()
         {
             if (_headerInfo.HeaderTemplate != null)
             {

@@ -135,7 +135,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
             DrawingOrder = DrawingOrder.AboveContent;
             BackgroundColor = CalendarBackground;
             _layout = new CalendarVerticalStackLayout(HeaderView.Height, FooterView.ShowActionButtons || FooterView.ShowTodayButton, FooterView.Height);
-#if (IOS || ANDROID) && NET10_0
+#if (IOS || ANDROID) && NET10_0_OR_GREATER
             this._layout.SafeAreaEdges = SafeAreaEdges.None;
 #elif IOS
             _layout.IgnoreSafeArea = true;

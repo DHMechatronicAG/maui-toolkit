@@ -226,8 +226,8 @@ namespace Syncfusion.Maui.Toolkit.Picker
             {
                 view = (View)content;
             }
-#elif NET10_0
-            view = (View)content;
+#elif NET10_0_OR_GREATER
+			view = (View)content;
 #endif
 
             if (view.BindingContext == null)
@@ -257,8 +257,8 @@ namespace Syncfusion.Maui.Toolkit.Picker
             {
                 view = (View)content;
             }
-#elif NET10_0
-            view = (View)content;
+#elif NET10_0_OR_GREATER
+			view = (View)content;
 #endif
 
             if (view.BindingContext == null && info != null)

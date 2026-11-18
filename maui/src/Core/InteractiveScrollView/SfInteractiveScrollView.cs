@@ -822,8 +822,8 @@
 
 #if NET9_0
             this.Layout(new Rect(this.Bounds.X, this.Bounds.Y, controlWidth, controlHeight));
-#elif NET10_0
-            this.Frame = new Rect(this.Bounds.X, this.Bounds.Y, controlWidth, controlHeight);
+#elif NET10_0_OR_GREATER
+			this.Frame = new Rect(this.Bounds.X, this.Bounds.Y, controlWidth, controlHeight);
             this.InvalidateMeasure();
 #endif
         }

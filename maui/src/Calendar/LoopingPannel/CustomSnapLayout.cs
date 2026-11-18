@@ -92,21 +92,21 @@ namespace Syncfusion.Maui.Toolkit.Calendar
             // Layout should clip its children to its bounds when the value is true.
             IsClippedToBounds = true;
 
-#if (IOS || ANDROID) && NET10_0
+#if (IOS || ANDROID) && NET10_0_OR_GREATER
             this.SafeAreaEdges = SafeAreaEdges.None;
 #elif IOS
             IgnoreSafeArea = true;
 #endif
-        }
+		}
 
-#endregion
+		#endregion
 
-        #region Internal Methods
+		#region Internal Methods
 
-        /// <summary>
-        /// Triggers the animation to move the right side of the calender view.
-        /// </summary>
-        internal void AnimateMoveToNextView()
+		/// <summary>
+		/// Triggers the animation to move the right side of the calender view.
+		/// </summary>
+		internal void AnimateMoveToNextView()
         {
             //// Get the index value based on current child index.
             //// Current child index = 0(previous view). Current child index = 1(current view). Current child index 2(next view).

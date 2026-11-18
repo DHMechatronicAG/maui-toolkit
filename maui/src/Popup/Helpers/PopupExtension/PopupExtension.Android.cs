@@ -153,7 +153,7 @@ namespace Syncfusion.Maui.Toolkit.Popup
 			{
 				double decorViewFrameLeft;
 				int rightPx = 0;
-#if NET10_0
+#if NET10_0_OR_GREATER
 				// 997668: Popup renders outside the visible bounds on Android when the system bars (status bar and navigation bar) are hidden.
 				if ((int)Android.OS.Build.VERSION.SdkInt >= 35 && DeviceDisplay.MainDisplayInfo.Orientation is DisplayOrientation.Landscape)
 				{
@@ -182,7 +182,7 @@ namespace Syncfusion.Maui.Toolkit.Popup
 				if (WindowFlagHasNoLimits && platformRootView is not null)
 				{
 					var platformRootViewWidth = platformRootView.Width;
-#if NET10_0
+#if NET10_0_OR_GREATER
 					if (WindowFlagHasFullScreen && (int)Android.OS.Build.VERSION.SdkInt >= 35 && DeviceDisplay.MainDisplayInfo.Orientation is DisplayOrientation.Landscape)
 					{
 						// In .NET 10, the root view<65>s width includes the decorViewFrameLeft and decorViewFrameRight, so subtract the decorViewFrameLeft and decorViewFrameRight.
@@ -218,7 +218,7 @@ namespace Syncfusion.Maui.Toolkit.Popup
 			else if (decorViewFrame is not null)
 			{
 				double decorViewFrameTop;
-#if NET10_0
+#if NET10_0_OR_GREATER
 				// 997668: Popup renders outside the visible bounds on Android when the system bars (status bar and navigation bar) are hidden.
 				if ((int)Android.OS.Build.VERSION.SdkInt >= 35 && DeviceDisplay.MainDisplayInfo.Orientation is not DisplayOrientation.Landscape)
 				{
@@ -249,7 +249,7 @@ namespace Syncfusion.Maui.Toolkit.Popup
 				if (WindowFlagHasNoLimits && platformRootView is not null)
 				{
 					var platformRootViewHeight = platformRootView.Height;
-#if NET10_0
+#if NET10_0_OR_GREATER
 					if (WindowFlagHasFullScreen && (int)Android.OS.Build.VERSION.SdkInt >= 35 && DeviceDisplay.MainDisplayInfo.Orientation is not DisplayOrientation.Landscape)
 					{
 						// In .NET 10, the root view<65>s height includes the decorViewFrameTop, so subtract the decorViewFrameTop.
@@ -328,18 +328,18 @@ namespace Syncfusion.Maui.Toolkit.Popup
 							return insets.Bottom;
 						case "Top":
 							{
-#if NET10_0
-                            // In .NET 10 case, fall back to decorViewFrame when Top inset is 0.
-                            return insets.Top == 0 ? (int)Math.Round(WindowOverlayHelper._decorViewFrame?.Top ?? 0f / WindowOverlayHelper._density) : insets.Top;
+#if NET10_0_OR_GREATER
+								// In .NET 10 case, fall back to decorViewFrame when Top inset is 0.
+								return insets.Top == 0 ? (int)Math.Round(WindowOverlayHelper._decorViewFrame?.Top ?? 0f / WindowOverlayHelper._density) : insets.Top;
 #else
 								return insets.Top;
 #endif
 							}
 						case "Left":
 							{
-#if NET10_0
-                            // In .NET 10 case, fall back to decorViewFrame when Left inset is 0.
-                            return insets.Left == 0 ? (int)Math.Round(WindowOverlayHelper._decorViewFrame?.Left ?? 0f / WindowOverlayHelper._density) : insets.Left;
+#if NET10_0_OR_GREATER
+								// In .NET 10 case, fall back to decorViewFrame when Left inset is 0.
+								return insets.Left == 0 ? (int)Math.Round(WindowOverlayHelper._decorViewFrame?.Left ?? 0f / WindowOverlayHelper._density) : insets.Left;
 #else
 								return insets.Left;
 #endif

@@ -686,8 +686,8 @@ After:
                 accessibilityEvent = CustomAccessibilityProvider.GetAccessibilityEvent(eventType);
                 if (accessibilityEvent != null)
                 {
-#if NET10_0
-                    if (Build.VERSION.SdkInt >= BuildVersionCodes.Lollipop)
+#if NET10_0_OR_GREATER
+					if (Build.VERSION.SdkInt >= BuildVersionCodes.Lollipop)
                     {
 #pragma warning disable CA1416 // Validate platform compatibility
                         accessibilityEvent.Enabled = true;

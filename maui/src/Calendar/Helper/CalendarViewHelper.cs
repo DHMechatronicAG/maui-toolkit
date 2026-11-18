@@ -1573,10 +1573,10 @@ namespace Syncfusion.Maui.Toolkit.Calendar
             View view;
             var content = template.CreateContent();
 
-            //// Inside a data template we can have view, layout and ViewCell directly.
-            //// If the template has view cell as it direct content then we cannot cast it to view.
-            //// All layouts, controls and views are base type of view but ViewCell is not type of view,
-            //// hence we need to get the view from view cell.
+			//// Inside a data template we can have view, layout and ViewCell directly.
+			//// If the template has view cell as it direct content then we cannot cast it to view.
+			//// All layouts, controls and views are base type of view but ViewCell is not type of view,
+			//// hence we need to get the view from view cell.
 #if NET9_0
             if (content is ViewCell)
             {
@@ -1586,8 +1586,8 @@ namespace Syncfusion.Maui.Toolkit.Calendar
             {
                 view = (View)content;
             }
-#elif NET10_0
-            view = (View)content;
+#elif NET10_0_OR_GREATER
+			view = (View)content;
 #endif
 
             if (view.BindingContext == null && details != null)

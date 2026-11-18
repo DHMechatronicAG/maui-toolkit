@@ -90,19 +90,19 @@ namespace Syncfusion.Maui.Toolkit.Picker
             Scrolled += OnViewScrolling;
             Content = _pickerView;
             PropertyChanged += OnScrollPropertyChanged;
-#if (IOS || ANDROID) && NET10_0
+#if (IOS || ANDROID) && NET10_0_OR_GREATER
             SafeAreaEdges = SafeAreaEdges.None;
 #endif
-        }
+		}
 
-        #endregion
+		#endregion
 
-        #region Internal Methods
+		#region Internal Methods
 
-        /// <summary>
-        /// Method to update the selected index changed.
-        /// </summary>
-        internal void UpdateSelectedIndexValue()
+		/// <summary>
+		/// Method to update the selected index changed.
+		/// </summary>
+		internal void UpdateSelectedIndexValue()
         {
             if (!_pickerLayoutInfo.PickerInfo.IsValidParent)
             {

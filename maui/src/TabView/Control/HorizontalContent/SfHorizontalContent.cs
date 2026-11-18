@@ -671,11 +671,11 @@ namespace Syncfusion.Maui.Toolkit.TabView
 #if WINDOWS
 					if (_isSelectionProcessed)
 					{
-#if NET10_0
+#if NET10_0_OR_GREATER
                         _horizontalStackLayout?.TranslateToAsync(-xPosition, 0, (uint)ContentTransitionDuration, AnimationEasing);
 #else
 						_horizontalStackLayout?.TranslateTo(-xPosition, 0, (uint)ContentTransitionDuration, AnimationEasing);
-#endif					
+#endif
 						_isSelectionProcessed = false;
 					}
 					else
@@ -689,7 +689,7 @@ namespace Syncfusion.Maui.Toolkit.TabView
 					double targetX = ((this as IVisualElementController).EffectiveFlowDirection & EffectiveFlowDirection.RightToLeft) is not EffectiveFlowDirection.RightToLeft ? -xPosition : xPosition;
 					if (_isSelectionProcessed)
 					{
-#if NET10_0
+#if NET10_0_OR_GREATER
 						_horizontalStackLayout?.TranslateToAsync(targetX, 0, (uint)ContentTransitionDuration, AnimationEasing);
 #else
 						_horizontalStackLayout?.TranslateTo(targetX, 0, (uint)ContentTransitionDuration, AnimationEasing);
@@ -725,7 +725,7 @@ namespace Syncfusion.Maui.Toolkit.TabView
 				{
 					if (_isSelectionProcessed)
 					{
-#if NET10_0
+#if NET10_0_OR_GREATER
                        _horizontalStackLayout?.TranslateToAsync(-xPosition, 0, (uint)ContentTransitionDuration, AnimationEasing);
 #else
                        _horizontalStackLayout?.TranslateTo(-xPosition, 0, (uint)ContentTransitionDuration, AnimationEasing);
@@ -744,7 +744,7 @@ namespace Syncfusion.Maui.Toolkit.TabView
 				double targetX = ((this as IVisualElementController).EffectiveFlowDirection & EffectiveFlowDirection.RightToLeft) is not EffectiveFlowDirection.RightToLeft ? -xPosition : xPosition;
 				if (_isSelectionProcessed)
 				{
-#if NET10_0
+#if NET10_0_OR_GREATER
 					_horizontalStackLayout?.TranslateToAsync(targetX, 0, (uint)ContentTransitionDuration, AnimationEasing);
 #else
 					_horizontalStackLayout?.TranslateTo(targetX, 0, (uint)ContentTransitionDuration, AnimationEasing);
@@ -1393,7 +1393,7 @@ namespace Syncfusion.Maui.Toolkit.TabView
 #if !WINDOWS
 			if (((this as IVisualElementController).EffectiveFlowDirection & EffectiveFlowDirection.RightToLeft) != EffectiveFlowDirection.RightToLeft)
 			{
-#if NET10_0
+#if NET10_0_OR_GREATER
 				_horizontalStackLayout.TranslateToAsync(-ContentWidth * (_currentIndex + 1), 0, 100, AnimationEasing);
 #else
 				_horizontalStackLayout.TranslateTo(-ContentWidth * (_currentIndex + 1), 0, 100, AnimationEasing);
@@ -1401,14 +1401,14 @@ namespace Syncfusion.Maui.Toolkit.TabView
 			}
 			else
 			{
-#if NET10_0
+#if NET10_0_OR_GREATER
 				_horizontalStackLayout.TranslateToAsync(ContentWidth * (_currentIndex + 1), 0, 100, AnimationEasing);
 #else
 				_horizontalStackLayout.TranslateTo(ContentWidth * (_currentIndex + 1), 0, 100, AnimationEasing);
 #endif
 			}
 #else
-#if NET10_0
+#if NET10_0_OR_GREATER
 			_horizontalStackLayout.TranslateToAsync(-ContentWidth * (_currentIndex + 1), 0, 100, AnimationEasing);
 #else
 			_horizontalStackLayout.TranslateTo(-ContentWidth * (_currentIndex + 1), 0, 100, AnimationEasing);
@@ -1441,7 +1441,7 @@ namespace Syncfusion.Maui.Toolkit.TabView
 #if !WINDOWS
 			if (((this as IVisualElementController).EffectiveFlowDirection & EffectiveFlowDirection.RightToLeft) != EffectiveFlowDirection.RightToLeft)
 			{
-#if NET10_0
+#if NET10_0_OR_GREATER
 				_horizontalStackLayout?.TranslateToAsync(-ContentWidth * (_currentIndex - 1), 0, 100, AnimationEasing);
 #else
 				_horizontalStackLayout?.TranslateTo(-ContentWidth * (_currentIndex - 1), 0, 100, AnimationEasing);
@@ -1449,14 +1449,14 @@ namespace Syncfusion.Maui.Toolkit.TabView
 			}
 			else
 			{
-#if NET10_0
+#if NET10_0_OR_GREATER
 				_horizontalStackLayout?.TranslateToAsync(ContentWidth * (_currentIndex - 1), 0, 100, AnimationEasing);
 #else
 				_horizontalStackLayout?.TranslateTo(ContentWidth * (_currentIndex - 1), 0, 100, AnimationEasing);
 #endif
 			}
 #else
-#if NET10_0
+#if NET10_0_OR_GREATER
 				_horizontalStackLayout?.TranslateToAsync(-ContentWidth * (_currentIndex - 1), 0, 100, AnimationEasing);
 #else
 				_horizontalStackLayout?.TranslateTo(-ContentWidth * (_currentIndex - 1), 0, 100, AnimationEasing);
@@ -1493,7 +1493,7 @@ namespace Syncfusion.Maui.Toolkit.TabView
 #if !WINDOWS
 			if (((this as IVisualElementController).EffectiveFlowDirection & EffectiveFlowDirection.RightToLeft) != EffectiveFlowDirection.RightToLeft)
 			{
-#if NET10_0
+#if NET10_0_OR_GREATER
 				_horizontalStackLayout.TranslateToAsync(-ContentWidth * _currentIndex, 0, 100, AnimationEasing);
 #else
 				_horizontalStackLayout.TranslateTo(-ContentWidth * _currentIndex, 0, 100, AnimationEasing);
@@ -1501,14 +1501,14 @@ namespace Syncfusion.Maui.Toolkit.TabView
 			}
 			else
 			{
-#if NET10_0
+#if NET10_0_OR_GREATER
 				_horizontalStackLayout.TranslateToAsync(ContentWidth * _currentIndex, 0, 100, AnimationEasing);
 #else
 				_horizontalStackLayout.TranslateTo(ContentWidth * _currentIndex, 0, 100, AnimationEasing);
 #endif
 			}
 #else
-#if NET10_0
+#if NET10_0_OR_GREATER
 				_horizontalStackLayout.TranslateToAsync(-ContentWidth * _currentIndex, 0, 100, AnimationEasing);
 #else
 			    _horizontalStackLayout.TranslateTo(-ContentWidth * _currentIndex, 0, 100, AnimationEasing);

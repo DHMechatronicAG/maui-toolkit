@@ -2787,7 +2787,7 @@ namespace Syncfusion.Maui.Toolkit.Popup
 				if (windowPage.Navigation.ModalStack.LastOrDefault() is not null)
 				{
 					// LayoutChanged only wired for Modal page. Since when Popup is opened OnAppearing of Modal page height and width is not update in native level.
-#if NET10_0
+#if NET10_0_OR_GREATER
 					page.SizeChanged -= this.OnPageSizeChanged;
 					page.SizeChanged += this.OnPageSizeChanged;
 #else
@@ -2883,7 +2883,7 @@ namespace Syncfusion.Maui.Toolkit.Popup
 			// Unwire the LayoutChanged to avoid issues when resizing the window with Popup.IsOpen set to false.
 			if (sender is Page page)
 			{
-#if NET10_0
+#if NET10_0_OR_GREATER
 				page.SizeChanged -= this.OnPageSizeChanged;
 #else
 				page.LayoutChanged -= this.OnPageLayoutChanged;

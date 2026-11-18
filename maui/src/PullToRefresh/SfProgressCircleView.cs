@@ -370,8 +370,8 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
 		static View CreateTemplateContent(DataTemplate dataTemplate)
         {
             var templateView = dataTemplate.CreateContent();
-#if NET10_0
-            return (View)templateView;
+#if NET10_0_OR_GREATER
+			return (View)templateView;
 #else
 			if (templateView is ViewCell viewCell)
 			{
