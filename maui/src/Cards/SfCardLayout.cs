@@ -144,35 +144,33 @@ namespace Syncfusion.Maui.Toolkit.Cards
             Padding = new Thickness(10, 5);
             IsClippedToBounds = true;
             this.AddGestureListener(this);
-#if (IOS || ANDROID) && NET10_0_OR_GREATER
+#if (IOS || ANDROID)
             this.SafeAreaEdges = SafeAreaEdges.None;
-#elif IOS
-            IgnoreSafeArea = true;
 #endif
-		}
+        }
 
-		#endregion
+        #endregion
 
-		#region Properties
+        #region Properties
 
-		/// <summary>
-		/// Gets or sets the swipe direction of the card layout.
-		/// </summary>
-		/// <value>The default value of <see cref="SfCardLayout.SwipeDirection"/> is CardSwipeDirection.Right. </value>
-		/// <example>
-		/// The following code demonstrates, how to use the SwipeDirection property in the card layout.
-		/// # [XAML](#tab/tabid-1)
-		/// <code Lang="XAML"><![CDATA[
-		/// <Cards:SfCardLayout x:Name="CardLayout"
-		///                   SwipeDirection="Left">
-		/// </Cards:SfCardLayout>
-		/// ]]></code>
-		/// # [C#](#tab/tabid-2)
-		/// <code Lang="C#"><![CDATA[
-		/// CardLayout.SwipeDirection = CardSwipeDirection.Left;
-		/// ]]></code>
-		/// </example>
-		public CardSwipeDirection SwipeDirection
+        /// <summary>
+        /// Gets or sets the swipe direction of the card layout.
+        /// </summary>
+        /// <value>The default value of <see cref="SfCardLayout.SwipeDirection"/> is CardSwipeDirection.Right. </value>
+        /// <example>
+        /// The following code demonstrates, how to use the SwipeDirection property in the card layout.
+        /// # [XAML](#tab/tabid-1)
+        /// <code Lang="XAML"><![CDATA[
+        /// <Cards:SfCardLayout x:Name="CardLayout"
+        ///                   SwipeDirection="Left">
+        /// </Cards:SfCardLayout>
+        /// ]]></code>
+        /// # [C#](#tab/tabid-2)
+        /// <code Lang="C#"><![CDATA[
+        /// CardLayout.SwipeDirection = CardSwipeDirection.Left;
+        /// ]]></code>
+        /// </example>
+        public CardSwipeDirection SwipeDirection
         {
             get { return (CardSwipeDirection)GetValue(SwipeDirectionProperty); }
             set { SetValue(SwipeDirectionProperty, value); }
